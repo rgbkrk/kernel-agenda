@@ -1,0 +1,34 @@
+{
+  "name": "kernel-agenda",
+  "version": "0.0.0",
+  "description": "Kernel Agenda experiments with fluorine",
+  "main": "agenda.js",
+  "dependencies": {
+    "@reactivex/rxjs": "^5.0.0-beta.2"
+  },
+  "devDependencies": {
+    "babel-eslint": "^5.0.0",
+    "eslint": "^2.3.0",
+    "eslint-config-airbnb": "^6.0.2",
+    "eslint-plugin-react": "^4.1.0"
+  },
+  "scripts": {
+    "test": "echo \"we should test this\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rgbkrk/kernel-agenda.git"
+  },
+  "keywords": [
+    "agenda",
+    "kernel",
+    "jupyter",
+    "nteract"
+  ],
+  "author": "Kyle Kelley <rgbkrk@gmail.com>",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/rgbkrk/kernel-agenda/issues"
+  },
+  "homepage": "https://github.com/rgbkrk/kernel-agenda#readme"
+}

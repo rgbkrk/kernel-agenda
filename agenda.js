@@ -1,16 +1,46 @@
+const Rx = require('@reactivex/rxjs');
+const Immutable = require('immutable');
+
+import {
+  createExecuteRequest,
+  msgSpecToNotebookFormat,
+} from './messaging';
+
+const channels = {
+  iopub: 'fake',
+  shell: 'also-fake',
+};
+
+export function updateCellOutputs(id, outputs) {
+  return {
+    type: 'UPDATE_CELL_OUTPUTS',
+    id,
+    outputs,
+  };
+}
+
+export function updateCellExecutionCount(id, count) {
+  return {
+    type: 'UPDATE_CELL_EXECUTION_COUNT',
+    id,
+    count,
+  };
+}
+
 export function executeCell(id, source) {
   return Rx.Observable.create((subscriber) => {
     // Assume we have channels... somehow...
+    // Tempted to make this return a function that passes in channels
     const { iopub, shell } = channels;
 
-    if(!iopub || !shell) {
-      subscriber.error('kernel not connected')
-      subscriber.complete()
-      return;
+    if (!iopub || !shell) {
+      subscriber.error('kernel not connected');
+      subscriber.complete();
+      return () => {};
     }
 
     // Track all of our subscriptions for full disposal
-    subscriptions = [];
+    const subscriptions = [];
 
     const executeRequest = createExecuteRequest(source);
 
@@ -19,7 +49,7 @@ export function executeCell(id, source) {
     subscriptions.push(shell.subscribe(() => {}));
 
     // Set the current outputs to an empty list
-    subscriber.next(updateCellOutputs(id, new Immutable.List()))
+    subscriber.next(updateCellOutputs(id, new Immutable.List()));
 
     const childMessages = iopub.childOf(executeRequest)
                                .share();
@@ -39,7 +69,7 @@ export function executeCell(id, source) {
          .map(msgSpecToNotebookFormat)
          // Iteratively reduce on the outputs
          .scan((outputs, output) => {
-           if(output.output_type === 'clear_output') {
+           if (output.output_type === 'clear_output') {
              return new Immutable.List();
            }
            return outputs.push(Immutable.fromJS(output));
@@ -53,7 +83,7 @@ export function executeCell(id, source) {
     shell.next(executeRequest);
 
     return function disposed() {
-
-    }
-  })
+      subscriptions.forEach((sub) => sub.unsubscribe());
+    };
+  });
 }
