@@ -6,11 +6,8 @@ import {
   msgSpecToNotebookFormat,
 } from './messaging';
 
-const channels = {
-  iopub: 'fake',
-  shell: 'also-fake',
-};
 
+// A couple simple action creators we'll use in the real Agenda we're exploring
 export function updateCellOutputs(id, outputs) {
   return {
     type: 'UPDATE_CELL_OUTPUTS',
@@ -26,6 +23,13 @@ export function updateCellExecutionCount(id, count) {
     count,
   };
 }
+
+// TODO: How do we get access to the channels we need here? Pass them in to
+// executeCell ?
+const channels = {
+  iopub: 'fake',
+  shell: 'also-fake',
+};
 
 export function executeCell(id, source) {
   return Rx.Observable.create((subscriber) => {
