@@ -11,13 +11,12 @@ import {
   updateCellOutputs,
 } from './action-creators';
 
-// Usage
+// Usage:
+// dispatch(executeCell(id,source)(channels))
 
 export function executeCell(id, source) {
   function execute(channels) {
     return Rx.Observable.create((subscriber) => {
-      // Assume we have channels... somehow...
-      // Tempted to make this return a function that passes in channels
       const { iopub, shell } = channels;
 
       if (!iopub || !shell) {
