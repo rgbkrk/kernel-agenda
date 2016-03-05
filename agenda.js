@@ -11,7 +11,7 @@ import {
   updateCellOutputs,
 } from './action-creators';
 
-// Usage:
+// Usage, assuming using Fluorine
 // dispatch(executeCell(id,source)(channels))
 
 export function executeCell(id, source) {
