@@ -15,7 +15,7 @@ import {
 // dispatch(executeCell(id,source)(channels))
 
 export function executeCell(id, source) {
-  function execute(channels) {
+  return function executeCellOnChannels(channels) {
     return Rx.Observable.create((subscriber) => {
       const { iopub, shell } = channels;
 
@@ -68,11 +68,9 @@ export function executeCell(id, source) {
 
       shell.next(executeRequest);
 
-      return function disposed() {
+      return function executionDisposed() {
         subscriptions.forEach((sub) => sub.unsubscribe());
       };
     });
-  }
-
-  return execute;
+  };
 }
